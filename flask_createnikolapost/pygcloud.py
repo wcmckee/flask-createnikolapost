@@ -6,6 +6,7 @@
 
 from google.cloud import storage
 import os
+import subprocess
 
 
 # In[2]:
@@ -52,7 +53,28 @@ def uploadstatic(bucket, url):
         for name in files:
             filedir = (os.path.join(path, name))
             upload_blob(bucket, filedir, filedir.replace(url, ''))
-            make_blob_public(bucket, filedir.replace(url, ''))
+            print(name)
+            #make_blob_public(bucket, filedir.replace(url, ''))
+
+
+# In[1]:
+
+
+def makebucketpublic(bucket): 
+    subprocess.run("gsutil iam ch allUsers:objectViewer gs://{}".format(bucket), shell=True)
+
+
+# In[2]:
+
+
+def makebucketsync(bucket, url): 
+    subprocess.run("gsutil rsync -r {} gs://{}".format(url, bucket), shell=True)
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
